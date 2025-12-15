@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DESTINY</title>
+
+<meta name="theme-color" content="#1e90ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#f2f2f2;color:#333;overflow-x:hidden;}
+button{cursor:pointer;border:none}
+a{text-decoration:none;color:inherit}
+
+/* HEADER */
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:15px 25px;position:fixed;width:100%;z-index:100;
+  background:rgba(0,0,0,.3);backdrop-filter:blur(6px);
+}
+.logo{color:#fff;font-size:1.5rem;font-weight:700}
+header button{
+  margin-left:8px;padding:8px 15px;border-radius:30px;
+  background:rgba(255,255,255,.2);color:white;
+}
+
+/* HERO */
+.landing{
+  height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;color:white;
+  background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
+  url('https://destiny10.s3.us-east-1.amazonaws.com/destiny.jpg')
+  center/cover no-repeat;
+}
+.landing h2{font-size:3rem}
+.landing p{margin:10px 0}
+.start-btn{
+  padding:12px 40px;border-radius:50px;
+  background:linear-gradient(135deg,#1e90ff,#00bfff);
+  color:white;font-weight:600;
+}
+
+.booking-buttons{display:none;gap:12px;margin-top:15px;flex-wrap:wrap}
+.booking-buttons button{
+  padding:10px 25px;border-radius:30px;
+  background:rgba(255,255,255,.25);color:white
+}
+
+/* POPUPS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10}
+.popup{
+  display:none;position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:white;padding:25px;border-radius:20px;
+  width:90%;max-width:400px;z-index:20;
+  animation:pop .25s ease;
+}
+@keyframes pop{
+  from{opacity:0;transform:translate(-50%,-60%) scale(.9)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+
+input{
+  width:100%;padding:10px;margin:8px 0;
+  border-radius:10px;border:1px solid #ccc;
+}
+.form-btn{
+  width:100%;padding:10px;border-radius:30px;
+  background:#1e90ff;color:white;margin-top:10px;
+}
+.close{background:#ff6b6b}
+
+/* SECTIONS */
+section{padding:60px 20px;max-width:1200px;margin:auto}
+section h2{text-align:center;margin-bottom:25px}
+
+/* DESTINATIONS */
+.destinations{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+.destination{
+  width:200px;border-radius:15px;overflow:hidden;
+  box-shadow:0 10px 20px rgba(0,0,0,.15);
+  transition:.3s;cursor:pointer
+}
+.destination:hover{transform:scale(1.05)}
+.destination img{width:100%;height:140px;object-fit:cover}
+.destination h3{text-align:center;padding:8px;background:#111;color:white}
+
+/* ABOUT */
+.about{background:white;border-radius:20px;padding:30px;text-align:center}
+
+/* SERVICES */
+.services{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+.service{background:white;padding:20px;border-radius:15px;width:200px;text-align:center}
+
+/* TESTIMONIALS */
+.testimonials{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+.testimonial{background:white;padding:20px;border-radius:15px;width:250px;text-align:center}
+
+/* NEWSLETTER */
+.newsletter{text-align:center;background:#f8f8f8;border-radius:20px}
+
+/* FOOTER */
+footer{background:#222;color:white;text-align:center;padding:20px}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">DESTINY</div>
+  <div>
+    <button onclick="showSignup()">SIGN UP</button>
+    <button onclick="showLogin()">LOGIN</button>
+  </div>
+</header>
+
+<div class="landing">
+  <h2>DESTINY</h2>
+  <p>WHERE EVERY TRIP BECOMES A STORY</p>
+  <button class="start-btn" onclick="toggleBooking()">START BOOKINGS</button>
+  <div class="booking-buttons" id="bookingBtns">
+    <button onclick="openBooking('CAR')">BOOK CAR</button>
+    <button onclick="openBooking('DRIVER')">BOOK DRIVER</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<div class="popup" id="bookingPopup">
+  <h3 id="bookTitle"></h3>
+  <input id="from" placeholder="FROM">
+  <input id="destination" placeholder="DESTINATION">
+  <input type="date" id="date">
+  <button class="form-btn" onclick="saveBooking()">BOOK</button>
+  <button class="form-btn close" onclick="closeAll()">CLOSE</button>
+</div>
+
+<div class="popup" id="signupPopup">
+  <h3>SIGN UP</h3>
+  <input id="suName" placeholder="NAME">
+  <input id="suEmail" placeholder="EMAIL">
+  <input id="suPass" type="password" placeholder="PASSWORD">
+  <button class="form-btn" onclick="signup()">SIGN UP</button>
+  <button class="form-btn close" onclick="closeAll()">CLOSE</button>
+</div>
+
+<div class="popup" id="loginPopup">
+  <h3>LOGIN</h3>
+  <input id="liEmail" placeholder="EMAIL">
+  <input id="liPass" type="password" placeholder="PASSWORD">
+  <button class="form-btn" onclick="login()">LOGIN</button>
+  <button class="form-btn close" onclick="closeAll()">CLOSE</button>
+</div>
+
+<section>
+  <h2>POPULAR DESTINATIONS</h2>
+  <div class="destinations">
+    <div class="destination"><img src="https://destiny10.s3.us-east-1.amazonaws.com/gettyimages-989152382-2048x2048.jpg"><h3>TADOBA</h3></div>
+    <div class="destination"><img src="https://destiny10.s3.us-east-1.amazonaws.com/CHIKHALDARA.jpg"><h3>CHIKALDHARA</h3></div>
+    <div class="destination"><img src="https://destiny10.s3.us-east-1.amazonaws.com/istockphoto-585282788-1024x1024.jpg"><h3>SEVEN SISTER HILLS</h3></div>
+  </div>
+</section>
+
+<section>
+  <h2>WHAT OUR USERS SAY</h2>
+  <div class="testimonials">
+    <div class="testimonial"><p>"Booking was so easy and seamless!"</p><h4>- ANG</h4></div>
+    <div class="testimonial"><p>"Great destinations and friendly drivers."</p><h4>- AVK</h4></div>
+  </div>
+</section>
+
+<section class="about">
+  <h2>ABOUT DESTINY</h2>
+  <p>DESTINY IS YOUR ULTIMATE TRAVEL COMPANION. DISCOVER DESTINATIONS, BOOK CARS OR DRIVERS, AND ENJOY HASSLE-FREE JOURNEYS.</p>
+</section>
+
+<section class="services">
+  <div class="service"><h4>Book Cars</h4><p>Choose the best cars</p></div>
+  <div class="service"><h4>Book Drivers</h4><p>Professional drivers</p></div>
+  <div class="service"><h4>24/7 Support</h4><p>Always available</p></div>
+</section>
+
+<section class="newsletter">
+  <h2>Get Travel Updates</h2>
+  <input placeholder="Email">
+  <button class="form-btn">Subscribe</button>
+</section>
+
+<footer>© 2025 DESTINY</footer>
+
+<script>
+const overlay=document.getElementById("overlay");
+const bookingPopup=document.getElementById("bookingPopup");
+const signupPopup=document.getElementById("signupPopup");
+const loginPopup=document.getElementById("loginPopup");
+const bookingBtns=document.getElementById("bookingBtns");
+let bookingType="";
+
+function toggleBooking(){bookingBtns.style.display="flex";}
+function openBooking(t){bookingType=t;bookTitle.innerText="BOOK "+t;bookingPopup.style.display="block";overlay.style.display="block";}
+function showSignup(){closeAll();signupPopup.style.display="block";overlay.style.display="block";}
+function showLogin(){closeAll();loginPopup.style.display="block";overlay.style.display="block";}
+function closeAll(){bookingPopup.style.display=signupPopup.style.display=loginPopup.style.display="none";overlay.style.display="none";}
+
+function signup(){
+  if(!suName.value||!suEmail.value||!suPass.value)return alert("Fill all fields");
+  localStorage.setItem("destinyUser",JSON.stringify({email:suEmail.value,pass:suPass.value}));
+  alert("Signup successful");closeAll();
+}
+function login(){
+  const u=JSON.parse(localStorage.getItem("destinyUser"));
+  if(!u||u.email!==liEmail.value||u.pass!==liPass.value)return alert("Invalid");
+  localStorage.setItem("destinyLoggedIn","yes");
+  alert("Login successful");closeAll();
+}
+function saveBooking(){
+  if(!localStorage.getItem("destinyLoggedIn"))return showSignup();
+  alert("Booking confirmed for "+bookingType);closeAll();
+}
+
+/* INLINE PWA */
+const manifest={name:"DESTINY",short_name:"DESTINY",start_url:".",display:"standalone",theme_color:"#1e90ff"};
+const blob=new Blob([JSON.stringify(manifest)],{type:"application/json"});
+const link=document.createElement("link");link.rel="manifest";link.href=URL.createObjectURL(blob);
+document.head.appendChild(link);
+
+if("serviceWorker"in navigator){
+  const sw=`self.addEventListener('fetch',e=>e.respondWith(fetch(e.request)))`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw])));
+}
+</script>
+
+</body>
+</html>
